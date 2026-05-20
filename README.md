@@ -136,7 +136,6 @@ Migrations, static file collection, and menu seeding run automatically on each d
 
 
 1. **Voice support** — Web Speech API for input + TTS for responses
-2. **SMS integration** — Twilio to send order confirmation texts
-3. **Image thumbnails** — photo for each menu item via S3
-4. **Auth + order history** — phone number–based login to track past orders
-5. **Multi-language** — Claude handles Spanish/Arabic natively; just needs a language selector
+2. **Image thumbnails** — photo for each menu item via S3
+3. **Auth + order history** — phone number–based login to track past orders
+4. **Multi-language** — Claude handles Spanish/Arabic natively; just needs a language selector
