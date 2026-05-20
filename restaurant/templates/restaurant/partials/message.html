@@ -1,0 +1,14 @@
+{% if role == 'user' %}
+<div class="flex justify-end mb-2">
+  <div class="max-w-[85%] md:max-w-[70%] rounded-2xl rounded-br-sm px-4 py-3 text-sm leading-relaxed bg-terracotta-light text-gray-800">
+    {{ content|linebreaksbr }}
+  </div>
+</div>
+{% else %}
+<div class="flex justify-start mb-2">
+  <div class="max-w-[85%] md:max-w-[70%] rounded-2xl rounded-bl-sm px-4 py-3 text-sm leading-relaxed bg-olive-light text-gray-800">
+    <div class="text-xs font-bold text-olive mb-1">Zara</div>
+    {{ content|linebreaksbr }}
+  </div>
+</div>
+{% endif %}

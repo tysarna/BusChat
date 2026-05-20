@@ -1,0 +1,77 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block title %}Menu — Zara's Mediterranean Kitchen{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-6">
+
+  <h1 class="font-display text-3xl text-olive mb-1">Our Menu</h1>
+  <p class="text-sm text-gray-500 mb-6">Fresh Mediterranean flavors, made to order. Pickup in 15-20 min.</p>
+
+  <!-- Category tabs -->
+  <div class="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide">
+    <button class="cat-tab active" data-cat="all">All</button>
+    {% for cat_key, cat_data in items_by_category.items %}
+    <button class="cat-tab" data-cat="{{ cat_key }}">{{ cat_data.label }}</button>
+    {% endfor %}
+  </div>
+
+  <!-- Menu sections -->
+  {% for cat_key, cat_data in items_by_category.items %}
+  <section class="menu-section mb-8" data-section="{{ cat_key }}">
+    <h2 class="font-display text-xl text-olive border-b border-border pb-2 mb-4">{{ cat_data.label }}</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {% for item in cat_data.items %}
+      <div class="bg-white rounded-2xl border border-border p-4 flex flex-col gap-2 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex justify-between items-start gap-2">
+          <h3 class="font-bold text-gray-900 text-sm leading-snug">{{ item.name }}</h3>
+          <span class="font-bold text-terracotta text-sm whitespace-nowrap">${{ item.price }}</span>
+        </div>
+        <p class="text-xs text-gray-500 leading-relaxed flex-1">{{ item.description }}</p>
+        <div class="flex items-center justify-between gap-2 mt-1">
+          <!-- Dietary badges -->
+          <div class="flex gap-1 flex-wrap">
+            {% if item.is_vegan %}<span class="badge badge-green">Vegan</span>{% elif item.is_vegetarian %}<span class="badge badge-green">Vegetarian</span>{% endif %}
+            {% if item.is_gluten_free %}<span class="badge badge-yellow">GF</span>{% endif %}
+            {% if item.is_spicy %}<span class="badge badge-red">Spicy 🌶</span>{% endif %}
+          </div>
+          <!-- Add to cart -->
+          <form method="post" action="{% url 'cart_add' %}"
+                hx-post="{% url 'cart_add' %}"
+                hx-target="#cart-badge"
+                hx-swap="outerHTML"
+>
+            {% csrf_token %}
+            <input type="hidden" name="item_id" value="{{ item.pk }}">
+            <button type="submit" class="add-btn">+ Add</button>
+          </form>
+        </div>
+        {% if item.allergens %}
+        <p class="text-[10px] text-gray-400 mt-0.5">Contains: {{ item.allergens }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+const tabs = document.querySelectorAll('.cat-tab');
+const sections = document.querySelectorAll('.menu-section');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const cat = tab.dataset.cat;
+    sections.forEach(s => {
+      s.style.display = (cat === 'all' || s.dataset.section === cat) ? '' : 'none';
+    });
+  });
+});
+</script>
+{% endblock %}

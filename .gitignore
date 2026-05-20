@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+staticfiles/
+db.sqlite3
+*.log
+.elasticbeanstalk/
+venv/
+.DS_Store
+*.sqlite3

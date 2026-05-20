@@ -1,0 +1,51 @@
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Analytics — Zara's Kitchen{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <h1 class="font-display text-3xl text-olive mb-1">Analytics</h1>
+  <p class="text-sm text-gray-500 mb-6">Live conversation and order insights.</p>
+
+  <!-- Stats cards -->
+  <div class="grid grid-cols-3 gap-4 mb-8">
+    <div class="bg-white rounded-2xl border border-border p-4 text-center shadow-sm">
+      <p class="text-3xl font-bold text-olive">{{ total_conversations }}</p>
+      <p class="text-xs text-gray-500 mt-1">Conversations</p>
+    </div>
+    <div class="bg-white rounded-2xl border border-border p-4 text-center shadow-sm">
+      <p class="text-3xl font-bold text-terracotta">{{ total_messages }}</p>
+      <p class="text-xs text-gray-500 mt-1">Messages</p>
+    </div>
+    <div class="bg-white rounded-2xl border border-border p-4 text-center shadow-sm">
+      <p class="text-3xl font-bold text-olive">{{ total_orders }}</p>
+      <p class="text-xs text-gray-500 mt-1">Orders Placed</p>
+    </div>
+  </div>
+
+  <!-- Intent breakdown -->
+  <div class="bg-white rounded-2xl border border-border p-5 shadow-sm">
+    <h2 class="font-display text-xl text-olive mb-4">What customers ask about</h2>
+    {% if intent_counts %}
+    {% with max_count=intent_counts.0.count %}
+    <div class="space-y-3">
+      {% for row in intent_counts %}
+      <div>
+        <div class="flex justify-between text-sm mb-1">
+          <span class="font-medium capitalize">{{ row.intent|cut:"_"|title }}</span>
+          <span class="text-gray-500">{{ row.count }}</span>
+        </div>
+        <div class="h-2.5 bg-linen rounded-full overflow-hidden">
+          <div class="h-full bg-terracotta rounded-full transition-all"
+               style="width: {% widthratio row.count max_count 100 %}%"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endwith %}
+    {% else %}
+    <p class="text-sm text-gray-400 text-center py-6">No conversations yet. Start chatting!</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

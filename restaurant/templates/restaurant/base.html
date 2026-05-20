@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2D6B4A">
+  <title>{% block title %}Zara's Mediterranean Kitchen{% endblock %}</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            terracotta: { DEFAULT: '#C4743A', light: '#FFF0E6', dark: '#A05C28' },
+            olive: { DEFAULT: '#2D6B4A', light: '#F0F4F0', dark: '#1E4D35' },
+            linen: '#FAF7F2',
+            border: '#E8E0D5',
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            body: ['Lato', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
+
+  <link rel="stylesheet" href="{% static 'restaurant/css/main.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-linen font-body text-gray-900 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-olive text-white fixed top-0 left-0 right-0 z-50 h-14 flex items-center px-4 shadow-md">
+    <a href="{% url 'chat' %}" class="flex items-center gap-2 flex-1 min-w-0">
+      <span class="text-xl">🫒</span>
+      <span class="font-display text-lg leading-tight truncate">Zara's Kitchen</span>
+    </a>
+    <nav class="flex items-center gap-1">
+      <a href="{% url 'menu' %}" class="px-3 py-1.5 rounded-full text-sm font-bold hover:bg-olive-dark transition-colors {% if request.resolver_match.url_name == 'menu' %}bg-olive-dark{% endif %}">
+        Menu
+      </a>
+      <a href="{% url 'cart' %}" class="relative px-3 py-1.5 rounded-full text-sm font-bold hover:bg-olive-dark transition-colors {% if request.resolver_match.url_name == 'cart' %}bg-olive-dark{% endif %}">
+        Cart
+        <span id="cart-badge" class="{% if cart_count %}inline-flex{% else %}hidden{% endif %} absolute -top-1 -right-1 bg-terracotta text-white text-xs w-5 h-5 rounded-full items-center justify-center font-bold">{{ cart_count }}</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Main content -->
+  <main class="flex-1 mt-14 {% block main_class %}{% endblock %}">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-olive-dark text-white/70 text-xs text-center py-2 px-4">
+    <p>1842 High St, Columbus OH · (614) 555-0192 · Mon-Thu 11am-9pm · Fri-Sat 11am-10pm · Sun 12pm-8pm</p>
+  </footer>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

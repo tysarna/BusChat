@@ -1,0 +1,48 @@
+<div id="cart-summary">
+{% if cart and cart.items.all %}
+<div class="space-y-3 mb-4">
+  {% for item in cart.items.all %}
+  <div class="flex items-center gap-3 bg-white rounded-xl border border-border p-3">
+    <div class="flex-1 min-w-0">
+      <p class="font-bold text-sm truncate">{{ item.menu_item.name }}</p>
+      <p class="text-xs text-gray-500">${{ item.unit_price }} each</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <form method="post" action="{% url 'cart_update' %}" hx-post="{% url 'cart_update' %}" hx-target="#cart-summary" hx-swap="outerHTML">
+        {% csrf_token %}
+        <input type="hidden" name="item_id" value="{{ item.pk }}">
+        <input type="hidden" name="action" value="decrease">
+        <button type="submit" class="qty-btn">−</button>
+      </form>
+      <span class="w-6 text-center font-bold text-sm">{{ item.quantity }}</span>
+      <form method="post" action="{% url 'cart_update' %}" hx-post="{% url 'cart_update' %}" hx-target="#cart-summary" hx-swap="outerHTML">
+        {% csrf_token %}
+        <input type="hidden" name="item_id" value="{{ item.pk }}">
+        <input type="hidden" name="action" value="increase">
+        <button type="submit" class="qty-btn">+</button>
+      </form>
+    </div>
+    <span class="font-bold text-sm text-terracotta w-14 text-right">${{ item.line_total }}</span>
+    <form method="post" action="{% url 'cart_update' %}" hx-post="{% url 'cart_update' %}" hx-target="#cart-summary" hx-swap="outerHTML">
+      {% csrf_token %}
+      <input type="hidden" name="item_id" value="{{ item.pk }}">
+      <input type="hidden" name="action" value="remove">
+      <button type="submit" class="text-gray-400 hover:text-red-500 transition-colors ml-1" title="Remove">✕</button>
+    </form>
+  </div>
+  {% endfor %}
+</div>
+<!-- Totals -->
+<div class="bg-olive-light rounded-xl p-4 text-sm space-y-1.5">
+  <div class="flex justify-between text-gray-600"><span>Subtotal</span><span>${{ cart.subtotal }}</span></div>
+  <div class="flex justify-between text-gray-600"><span>Tax (8%)</span><span>${{ cart.tax }}</span></div>
+  <div class="flex justify-between font-bold text-gray-900 text-base pt-1 border-t border-border"><span>Total</span><span>${{ cart.total }}</span></div>
+</div>
+{% else %}
+<div class="text-center py-10 text-gray-400">
+  <p class="text-4xl mb-3">🫙</p>
+  <p class="font-bold">Your cart is empty</p>
+  <p class="text-sm mt-1">Add items from the <a href="{% url 'menu' %}" class="text-olive underline">menu</a></p>
+</div>
+{% endif %}
+</div>
