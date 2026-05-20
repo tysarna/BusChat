@@ -2,7 +2,7 @@
 
 A live AI-powered restaurant assistant built with Django + Claude, deployed on AWS Elastic Beanstalk.
 
-**[Live Demo →] https://your-eb-url.elasticbeanstalk.com](http://buschat-prod.eba-hrtkkb3w.us-east-1.elasticbeanstalk.com**
+**[Live Demo →] http://buschat-prod.eba-hrtkkb3w.us-east-1.elasticbeanstalk.com**
 
 ---
 
