@@ -2,7 +2,7 @@
 
 A live AI-powered restaurant assistant built with Django + Claude, deployed on AWS Elastic Beanstalk.
 
-**[Live Demo →](https://your-eb-url.elasticbeanstalk.com)**
+**[Live Demo →]([https://your-eb-url.elasticbeanstalk.com](http://buschat-prod.eba-hrtkkb3w.us-east-1.elasticbeanstalk.com))**
 
 ---
 
@@ -134,11 +134,9 @@ Migrations, static file collection, and menu seeding run automatically on each d
 
 ## What I'd Improve With More Time
 
-1. **PostgreSQL on RDS** — replace SQLite for multi-instance scalability
-2. **Voice support** — Web Speech API for input + TTS for responses
-3. **SMS integration** — Twilio to send order confirmation texts
-4. **Image thumbnails** — photo for each menu item via S3
-5. **Auth + order history** — phone number–based login to track past orders
-6. **Real-time order status** — WebSocket updates when kitchen marks order ready
-7. **Multi-language** — Claude handles Spanish/Arabic natively; just needs a language selector
-8. **Stripe integration** — prepay for pickup orders online
+
+1. **Voice support** — Web Speech API for input + TTS for responses
+2. **SMS integration** — Twilio to send order confirmation texts
+3. **Image thumbnails** — photo for each menu item via S3
+4. **Auth + order history** — phone number–based login to track past orders
+5. **Multi-language** — Claude handles Spanish/Arabic natively; just needs a language selector
