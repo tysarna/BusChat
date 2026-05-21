@@ -52,7 +52,7 @@
 
   <!-- Input bar -->
   <div class="border-t border-border bg-white px-3 py-2 safe-bottom">
-    <form id="chat-form" class="flex items-end gap-2">
+    <form id="chat-form" method="post" action="{% url 'chat_send' %}" class="flex items-end gap-2">
       {% csrf_token %}
       <textarea
         id="chat-input"

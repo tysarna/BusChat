@@ -17,7 +17,7 @@
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (!sendBtn.disabled) form.dispatchEvent(new Event('submit'));
+      if (!sendBtn.disabled) form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
     }
   });
 
@@ -68,11 +68,17 @@
   }
 
   function getCsrf() {
-    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    // Try the hidden form input first
+    const input = document.querySelector('[name=csrfmiddlewaretoken]');
+    if (input) return input.value;
+    // Fallback: read from the <meta name="csrf-token"> tag in <head>
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta ? meta.getAttribute('content') : '';
   }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (sendBtn.disabled) return; // block double-submit during streaming
     const message = input.value.trim();
     if (!message) return;
 
@@ -86,22 +92,23 @@
     input.style.height = 'auto';
     setLoading(true);
 
-    // Create assistant bubble
+    // Create assistant bubble; keep button disabled until stream completes
     const responseSpan = appendAssistantBubble();
-    setLoading(false); // hide typing dots once bubble appears
     typingIndicator.classList.add('hidden');
 
     let fullText = '';
     let tokenCount = null;
 
     try {
+      const csrf = getCsrf();
       const response = await fetch('/chat/send/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'X-CSRFToken': getCsrf(),
+          'X-CSRFToken': csrf,
         },
-        body: new URLSearchParams({ message }),
+        // Include token in body too — belt-and-suspenders for proxies that strip headers
+        body: new URLSearchParams({ message, csrfmiddlewaretoken: csrf }),
       });
 
       if (!response.ok) throw new Error('Request failed');
@@ -167,7 +174,8 @@
   window.submitChip = (text) => {
     input.value = text;
     input.dispatchEvent(new Event('input'));
-    form.dispatchEvent(new Event('submit'));
+    // Use bubbles+cancelable so e.preventDefault() in the submit listener works
+    form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
   };
 
   // Scroll to bottom on load

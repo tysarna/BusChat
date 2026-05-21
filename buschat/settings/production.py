@@ -8,6 +8,14 @@ ALLOWED_HOSTS = [
     'localhost',
 ]
 
+# Allow CSRF for both HTTP and HTTPS EB domains (Django 4.0+ requirement)
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.elasticbeanstalk.com',
+    'http://*.elasticbeanstalk.com',
+    'http://localhost:8000',
+    'https://localhost:8000',
+]
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
